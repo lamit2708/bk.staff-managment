@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/AdminLTE.min.css" />
-        <link rel="stylesheet" href="~/css/bootstrap-editable.css" />
+        @*<link rel="stylesheet" href="~/css/bootstrap-editable.css" />*@
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -18,13 +18,14 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/AdminLTE.min.css" />
-        <link rel="stylesheet" href="~/css/bootstrap-editable.css" />
+        @*<link rel="stylesheet" href="~/css/bootstrap-editable.css" />*@
     </environment>
     <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="~/lib/Ionicons/css/ionicons.min.css">
     <link rel="stylesheet" href="~/css/skins/skin-blue.min.css">
-
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -35,6 +36,48 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     @Html.Raw(JavaScriptSnippet.FullScript)
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/adminlte.min.js" asp-append-version="true"></script>
+
+        <!-- DataTables -->
+        <script src="~/lib/datatables.net/js/jquery.dataTables.js"></script>
+        <script src="~/lib/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <!-- SlimScroll -->
+        <script src="~/lib/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="~/lib/fastclick/lib/fastclick.js"></script>
+
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/js/bootstrap-editable.js"></script>
+        <script src="~/js/adminlte.min.js" asp-append-version="true"></script>
+
+        <!-- DataTables -->
+        <script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="~/lib/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <!-- SlimScroll -->
+        <script src="~/lib/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="~/lib/fastclick/lib/fastclick.js"></script>
+    </environment>
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 
@@ -113,9 +156,9 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a class="menu_create_role" asp-controller="Staff" asp-action="Create">Create Staff</a></li>
-                            <li><a class="menu_grant_role" asp-controller="Staff" asp-action="Edit">Edit Staff</a></li>
-                            <li><a class="menu_list_role" asp-controller="Staff" asp-action="Index">List Staff</a></li>
+                            <li><a class="menu_create_role" asp-controller="Staffs" asp-action="Create">Create Staff</a></li>
+                            <li><a class="menu_grant_role" asp-controller="Staffs" asp-action="Edit">Edit Staff</a></li>
+                            <li><a class="menu_list_role" asp-controller="Staffs" asp-action="Index">List Staff</a></li>
                         </ul>
                     </li>
 
@@ -212,48 +255,7 @@
 
     <div id="ModalView"></div>
 
-    <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/adminlte.min.js" asp-append-version="true"></script>
-
-
-
-        <!-- DataTables -->
-        <script src="~/lib/datatables.net/js/jquery.dataTables.js"></script>
-        <script src="~/lib/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-        <!-- SlimScroll -->
-        <script src="~/lib/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-        <!-- FastClick -->
-        <script src="~/lib/fastclick/lib/fastclick.js"></script>
-
-    </environment>
-    <environment names="Staging,Production">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-        <script src="~/js/bootstrap-editable.js"></script>
-        <script src="~/js/adminlte.min.js" asp-append-version="true"></script>
-
-        <!-- DataTables -->
-        <script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
-        <script src="~/lib/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-        <!-- SlimScroll -->
-        <script src="~/lib/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-        <!-- FastClick -->
-        <script src="~/lib/fastclick/lib/fastclick.js"></script>
-    </environment>
+   
 
     @RenderSection("Scripts", required: false)
     <script>

@@ -24,8 +24,8 @@
                     @*<h3 class="box-title">User List</h3>*@
 
                     <button type="button" class="btnAdd btn btn-primary pull-left"
-                            onclick="location.href='@Url.Action("Add", "Customers")';">
-                        <i class="fa fa-plus"></i> Add Customer
+                            onclick="location.href='@Url.Action("Add", "Staffs")';">
+                        <i class="fa fa-plus"></i> Add Staff
                     </button>
                 </div>
                 <!-- /.box-header -->
@@ -82,11 +82,13 @@
                         <tfoot>
                             <tr>
                                 <th>User Name</th>
-                                <th>Customer Code</th>
-                                <th>Debit Balance</th>
+                                <th>Staff Code</th>
+                                <th>Title</th>
                                 <th>Phone Number</th>
                                 <th>Address</th>
                                 <th>Email</th>
+                                <th>Salary</th>
+                                <th>HireDate</th>
                                 <th>Edit</th>
                                 <th>Delete</th>
                             </tr>
@@ -102,14 +104,15 @@
     <!-- /.row -->
 </section>
 <!-- /.content -->
-
 <environment names="Development">
-
-
+    <!-- bootstrap datepicker -->
+    <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+    <script src="~/lib/moment/moment.js"></script>
 </environment>
 <environment names="Staging,Production">
-
-
+    <!-- bootstrap datepicker -->
+    <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+    <script src="~/lib/moment/moment.js"></script>
 </environment>
 @section Scripts {
 
@@ -135,8 +138,27 @@
 
 
             });
-            $(".datefield").datepicker({ dateFormat: 'dd/mm/yy', changeYear: true });
+          
+            $('.datefield').each(function (i, el) {
+                var txt = $(el).text();
+                var dateStr=moment.unix(parseInt(txt)/1000).format("DD-MM-YYYY");
+                //var date = new Date(parseInt(txt));
+                $(el).text(dateStr);
+            });
+            
         });
+        function timeConverter(UNIX_timestamp) {
+            var a = new Date(UNIX_timestamp * 1000);
+            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var year = a.getFullYear();
+            var month = months[a.getMonth()];
+            var date = a.getDate();
+            var hour = a.getHours();
+            var min = a.getMinutes();
+            var sec = a.getSeconds();
+            var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
+            return time;
+        }
     </script>
 
     <!-- page script -->

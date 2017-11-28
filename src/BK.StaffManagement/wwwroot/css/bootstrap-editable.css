@@ -68,7 +68,7 @@ a.editable-changed {
 
 .datepicker-inline {
   width: 220px; 
-/*  height: 220px;  */
+  height: 220px;  
 }
 
 .datepicker-float {

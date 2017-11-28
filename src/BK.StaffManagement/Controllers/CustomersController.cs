@@ -90,13 +90,13 @@ namespace BK.StaffManagement.Controllers
                         var role = StringEnum.GetStringValue(RoleType.Customer);
                         var result1 = await _userManager.AddToRoleAsync(user, role);
 
-                        var questionParam = new DynamicParameters();
-                        questionParam.Add(nameof(Customer.Id), user.Id);
-                        questionParam.Add(nameof(Customer.CustomerCode), model.CustomerCode);
-                        questionParam.Add(nameof(Customer.StaffId), user.Id);
-                        questionParam.Add(nameof(Customer.DebitBalance), model.DebitBalance);
+                        var customerParam = new DynamicParameters();
+                        customerParam.Add(nameof(Customer.Id), user.Id);
+                        customerParam.Add(nameof(Customer.CustomerCode), model.CustomerCode);
+                        customerParam.Add(nameof(Customer.StaffId), user.Id);
+                        customerParam.Add(nameof(Customer.DebitBalance), model.DebitBalance);
 
-                        _customerRepository.Create(questionParam);
+                        _customerRepository.Create(customerParam);
                         _customerRepository.Commit();
                         _logger.LogInformation("Customer created a new account with password.");
                         //return RedirectToLocal(returnUrl);
@@ -160,12 +160,12 @@ namespace BK.StaffManagement.Controllers
                         //var role = StringEnum.GetStringValue(RoleType.Customer);
                         //var result1 = await _userManager.AddToRoleAsync(user, role);
 
-                        var questionParam = new DynamicParameters();
-                        questionParam.Add(nameof(Customer.CustomerCode), model.CustomerCode);
-                        questionParam.Add(nameof(Customer.StaffId), user.Id);
-                        questionParam.Add(nameof(Customer.DebitBalance), model.DebitBalance);
+                        var customerParam = new DynamicParameters();
+                        customerParam.Add(nameof(Customer.CustomerCode), model.CustomerCode);
+                        customerParam.Add(nameof(Customer.StaffId), user.Id);
+                        customerParam.Add(nameof(Customer.DebitBalance), model.DebitBalance);
 
-                        _customerRepository.Update(user.Id, questionParam);
+                        _customerRepository.Update(user.Id, customerParam);
                         _customerRepository.Commit();
                         _logger.LogInformation("Customer updated");
                         //return RedirectToLocal(returnUrl);

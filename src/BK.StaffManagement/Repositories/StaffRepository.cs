@@ -43,10 +43,10 @@ WHERE c.Id='{id}'", (c, u) =>
         {
             var mapper = new MapperConfiguration(cfg => {
                 cfg.CreateMap<ApplicationUser, StaffViewModel>();
-                cfg.CreateMap<Customer, StaffViewModel>();
+                cfg.CreateMap<Staff, StaffViewModel>();
             });
             var mapperConf = mapper.CreateMapper();
-            var customers = Connection.Query<Customer, ApplicationUser, StaffViewModel>(@"
+            var customers = Connection.Query<Staff, ApplicationUser, StaffViewModel>(@"
 SELECT c.*, u.* FROM Staff c
 INNER JOIN AspNetUsers u ON c.Id = u.Id", (c, u) =>
             {

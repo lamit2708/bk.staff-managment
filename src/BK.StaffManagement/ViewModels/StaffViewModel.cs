@@ -66,6 +66,11 @@ namespace BK.StaffManagement.ViewModels
         [DataType(DataType.Date)]
         public virtual long HireDate { get; set; }
 
+
+        [Display(Name = "Hire Date")]
+        [DataType(DataType.Text)]
+        public virtual string HireDateStr { get; set; }
+
         //public string HireDateStr => 
     }
 }

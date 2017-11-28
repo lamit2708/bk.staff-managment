@@ -9,10 +9,6 @@
 !/src/BK.StaffManagement/wwwroot/lib/
 
 /src/BK.StaffManagement/wwwroot/lib/*
-!/src/BK.StaffManagement/wwwroot/lib/Ionicons
-!/src/BK.StaffManagement/wwwroot/lib/datatables.net
-!/src/BK.StaffManagement/wwwroot/lib/datatables.net-bs
-!/src/BK.StaffManagement/wwwroot/lib/font-awesome
 !/src/BK.StaffManagement/wwwroot/lib/iCheck
 
 /src/.vscode
