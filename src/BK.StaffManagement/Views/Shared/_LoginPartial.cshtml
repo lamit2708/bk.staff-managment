@@ -1,0 +1,50 @@
+@using Microsoft.AspNetCore.Identity
+@using BK.StaffManagement.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-nav">
+
+            <!-- User Account Menu -->
+            <li class="dropdown user user-menu bg-light-blue-gradient">
+                <!-- Menu Toggle Button -->
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="hidden-xs">Welcome <b>@UserManager.GetUserName(User)</b>!&nbsp;</span>
+                    <i class="fa fa-angle-double-down">&nbsp;</i>
+                </a>
+                <ul class="dropdown-menu">
+                    <!-- Menu Footer-->
+                    <li class="user-footer">
+                        <div class="pull-left">
+                            <a asp-controller="Account" asp-action="Logon" class="btn btn-primary btn-flat">Account</a>
+                        </div>
+                        <div class="pull-right">
+
+                            <button type="submit" class="btn btn-primary btn-flat">Sign out</button>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav">
+
+        <!-- User Account Menu -->
+        <li class="dropdown user user-menu bg-light-blue-gradient">
+            <!-- Menu Toggle Button -->
+            <a asp-area="" asp-controller="Account" asp-action="Login">
+                <span class="hidden-xs"><b>Log in</b>&nbsp;</span>
+                <i class="fa fa-sign-in"></i>
+            </a>
+        </li>
+
+    </ul>
+}

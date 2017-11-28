@@ -1,0 +1,29 @@
+{
+  "name": "bk.staffmanagement",
+  "description": "Staff Management",
+  "keywords": [
+    "css",
+    "js",
+    "less",
+    "mobile-first",
+    "responsive",
+    "front-end",
+    "framework",
+    "web"
+  ],
+  "homepage": "http://getbootstrap.com",
+  "license": "MIT",
+  "dependencies": {
+    "modernizr": "v3.3.1",
+    "jquery-ui": "1.12.1",
+    "jquery": "3.2.0",
+    "bootstrap": "3.3.7",
+    "fastclick": "v1.0.6",
+    "jquery-slimscroll": "v1.3.8",
+    "jquery-validation": "1.16.0",
+    "jquery-validation-unobtrusive": "v3.2.6"
+  },
+  "resolutions": {
+    "modernizr": "v3.3.1"
+  }
+}

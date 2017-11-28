@@ -1,0 +1,169 @@
+﻿@using BK.StaffManagement.ViewModels
+@model IEnumerable<CustomerViewModel>
+@{
+    ViewData["Title"] = "User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Customer Management
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Customer</a></li>
+        <li class="active><a href="#">List</a></li>
+
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    @*<h3 class="box-title">User List</h3>*@
+
+                    <button type="button" class="btnAdd btn btn-primary pull-left"
+                            onclick="location.href='@Url.Action("Add", "Customers")';">
+                        <i class="fa fa-plus"></i> Add Customer
+                    </button>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="tbl_user" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>User Name</th>
+                                <th>Customer Code</th>
+                                <th>Debit Balance</th>
+                                <th>Phone Number</th>
+                                <th>Address</th>
+                                <th>Email</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+
+                            @foreach (var u in Model)
+                            {
+                                <tr>
+                                   
+                                    <td>@u.UserName</td>
+                                    <td>@u.CustomerCode</td>
+                                    <td>@u.DebitBalance</td>
+                                    <td>@u.PhoneNumber</td>
+                                    <td>@u.Address</td>
+                                    <td>@u.Email</td>
+                                    <td>
+                                        @*@Html.ActionLink("Edit", "Edit", new { id=u.USER_ID})*@
+                                        <button type="button" data-user-id="@u.Id" data-user-name="@u.UserName"
+                                                class="btnEdit btn btn-success pull-right" style="margin-right: 5px;">
+                                            <i class="fa fa-edit"></i> Edit
+                                        </button>
+
+                                    </td>
+                                    <td>
+                                        <button data-user-id="@u.Id"
+                                                data-user-name="@u.UserName" type="button" class="btnDelete btn btn-danger pull-right">
+                                            <i class="fa fa-remove"></i> Del
+                                        </button>
+                                    </td>
+                                   
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>User Name</th>
+                                <th>Customer Code</th>
+                                <th>Debit Balance</th>
+                                <th>Phone Number</th>
+                                <th>Address</th>
+                                <th>Email</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
+<environment names="Development">
+
+
+</environment>
+<environment names="Staging,Production">
+
+
+</environment>
+@section Scripts {
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.btnEdit').click(function (e) {
+                //var userId = $(this).data('userId');
+                var id = $(this).data('userId');
+                //console.log($(this).data());
+                location.href = '@Url.Content("~/Customers/Edit/")' + id.toUpperCase();
+            });
+            $('.btnDelete').click(function (e)
+            {
+                var userId = $(this).data('userId');
+                var username = $(this).data('userName');
+                if (confirm("Are your sure to delete customer " + username+" ?")) {
+
+                    location.href = '@Url.Content("~/Customers/DeleteAsync/")' + userId;
+                }
+
+
+
+
+            });
+
+        });
+    </script>
+
+    <!-- page script -->
+    <script>
+        $(function () {
+            //$('#example1').DataTable()
+            $('#tbl_user').DataTable({
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+    </script>
+
+    <!-- Menu Active -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('a.menu_user').closest('li').addClass('active');
+            //$('a.menu_multilevel').closest('li').addClass('active');
+            //$('a.menu_level1').closest('li').addClass('active');
+
+        });
+    </script>
+
+
+
+
+
+
+
+}
