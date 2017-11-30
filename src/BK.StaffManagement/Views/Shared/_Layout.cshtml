@@ -50,7 +50,7 @@
         <script src="~/lib/jquery-slimscroll/jquery.slimscroll.min.js"></script>
         <!-- FastClick -->
         <script src="~/lib/fastclick/lib/fastclick.js"></script>
-
+        @*<script src="~/lib/lodash/debounce.js"></script>*@
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
@@ -76,6 +76,7 @@
         <script src="~/lib/jquery-slimscroll/jquery.slimscroll.min.js"></script>
         <!-- FastClick -->
         <script src="~/lib/fastclick/lib/fastclick.js"></script>
+        @*<script src="~/lib/lodash/debounce.js"></script>*@
     </environment>
 
 </head>
@@ -156,8 +157,7 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a class="menu_create_role" asp-controller="Staffs" asp-action="Create">Create Staff</a></li>
-                            <li><a class="menu_grant_role" asp-controller="Staffs" asp-action="Edit">Edit Staff</a></li>
+                            <li><a class="menu_create_role" asp-controller="Staffs" asp-action="Add">Add Staff</a></li>
                             <li><a class="menu_list_role" asp-controller="Staffs" asp-action="Index">List Staff</a></li>
                         </ul>
                     </li>

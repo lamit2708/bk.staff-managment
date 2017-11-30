@@ -33,66 +33,65 @@
                     <table id="tbl_user" class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>User Name</th>
+                                <th>UserName</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
                                 <th>Staff Code</th>
                                 <th>Title</th>
                                 <th>Phone Number</th>
-                                <th>Address</th>
                                 <th>Email</th>
-                                <th>Salary</th>
-                                <th>HireDate</th>
+                                <th>Hire Date</th>
                                 <th>Edit</th>
                                 <th>Delete</th>
+
                             </tr>
                         </thead>
-                        <tbody>
-
-
-
+                        @* <tbody>
                             @foreach (var u in Model)
-                            {
-                                <tr>
+                             {
+                                 <tr>
 
-                                    <td>@u.UserName</td>
-                                    <td>@u.StaffCode</td>
-                                    <td>@u.Title</td>
-                                    <td>@u.PhoneNumber</td>
-                                    <td>@u.Address</td>
-                                    <td>@u.Email</td>
-                                    <td>@u.Salary</td>
-                                    <td class="datefield">@u.HireDate</td>
-                                    <td>
-                                        @*@Html.ActionLink("Edit", "Edit", new { id=u.USER_ID})*@
-                                        <button type="button" data-user-id="@u.Id" data-user-name="@u.UserName"
-                                                class="btnEdit btn btn-success pull-right" style="margin-right: 5px;">
-                                            <i class="fa fa-edit"></i> Edit
-                                        </button>
+                                     <td>@u.UserName</td>
+                                     <td>@u.StaffCode</td>
+                                     <td>@u.Title</td>
+                                     <td>@u.PhoneNumber</td>
+                                     <td>@u.Address</td>
+                                     <td>@u.Email</td>
+                                     <td>@u.Salary</td>
+                                     <td class="datefield">@u.HireDate</td>
+                                     <td>
 
-                                    </td>
-                                    <td>
-                                        <button data-user-id="@u.Id"
-                                                data-user-name="@u.UserName" type="button" class="btnDelete btn btn-danger pull-right">
-                                            <i class="fa fa-remove"></i> Del
-                                        </button>
-                                    </td>
+                                         <button type="button" data-user-id="@u.Id" data-user-name="@u.UserName"
+                                                 class="btnEdit btn btn-success pull-right" style="margin-right: 5px;">
+                                             <i class="fa fa-edit"></i> Edit
+                                         </button>
 
-                                </tr>
-                            }
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>User Name</th>
-                                <th>Staff Code</th>
-                                <th>Title</th>
-                                <th>Phone Number</th>
-                                <th>Address</th>
-                                <th>Email</th>
-                                <th>Salary</th>
-                                <th>HireDate</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </tfoot>
+                                     </td>
+                                     <td>
+                                         <button data-user-id="@u.Id"
+                                                 data-user-name="@u.UserName" type="button" class="btnDelete btn btn-danger pull-right">
+                                             <i class="fa fa-remove"></i> Del
+                                         </button>
+                                     </td>
+
+                                 </tr>
+                             }
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>User Name</th>
+                                                        <th>Staff Code</th>
+                                                        <th>Title</th>
+                                                        <th>Phone Number</th>
+                                                        <th>Address</th>
+                                                        <th>Email</th>
+                                                        <th>Salary</th>
+                                                        <th>HireDate</th>
+                                                        <th>Edit</th>
+                                                        <th>Delete</th>
+                                                    </tr>
+                                                </tfoot>
+                        *@
                     </table>
                 </div>
                 <!-- /.box-body -->
@@ -108,72 +107,161 @@
     <!-- bootstrap datepicker -->
     <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
     <script src="~/lib/moment/moment.js"></script>
+
 </environment>
 <environment names="Staging,Production">
     <!-- bootstrap datepicker -->
     <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
     <script src="~/lib/moment/moment.js"></script>
+
 </environment>
 @section Scripts {
 
     <script type="text/javascript">
         $(document).ready(function () {
 
-            $('.btnEdit').click(function (e) {
+
+
+
+            oTable=$('#tbl_user').DataTable({
+                processing: true,
+                serverSide: true,
+                //filter: true,
+                ordering: true,
+                paging: true,
+                searching: true,
+                filter: true,
+                paginType: "full_numbers",
+                pageLength: 10,
+                ajax: {
+                    url: '/Staffs/IndexAjax',
+                    type: 'POST',
+                    //dataFilter: function (data) {
+                    //    var json = jQuery.parseJSON(data);
+                    //    json.recordsTotal = json.total;
+                    //    json.recordsFiltered = json.total;
+                    //    json.data = json.list;
+
+                    //    return JSON.stringify(json); // return JSON string
+                    //}
+                },
+                columns: [
+
+                    { "data": "userName" },
+                    { "data": "firstName" },
+                    { "data": "lastName" },
+                    { "data": "staffCode" },
+                    { "data": "title" },
+                    { "data": "phoneNumber" },
+                    //{ "data": "address" },
+                    { "data": "email" },
+                    //{ "data": "salary" },
+                    {
+                        title: "Hire Date",
+                        data: "hireDate",
+                        sClass: 'datefield',
+                        render: function (data, type, row) {
+                            //return (moment(data).format("DD.MM.YYYY"));
+                            return moment.unix(parseInt(data) / 1000).format("DD-MM-YYYY");
+                        }
+                    },
+                    {
+                        title: 'Edit',
+                        data: null,
+                        sClass: 'center',
+                        render: function (data, type, full, meta) {
+                            //return '<a href="showdata/id?' + data + '" target=_blank>Show patient</a>'
+                            return '<button type="button" data-user-id="' + full.id + '"'
+                                + 'data - user - name="' + data + '"'
+                                + 'class="btnEdit btn btn-success pull-right" style= "margin-right: 5px;" > '
+                                + '<i class="fa fa-edit" ></i> Edit </button>';
+                        }
+                    },
+                    {
+                        title: 'Delete',
+                        data: null,
+                        sClass: 'center',
+                        render: function (data, type, full, meta) {
+                            //return '<a href="showdata/id?' + data + '" target=_blank>Show patient</a>'
+                            return '<button data-user-id="' + full.id + '"'
+                                + 'data-user-name="' + full.username + '"'
+                                + ' type = "button" class="btnDelete btn btn-danger pull-right" >'
+                                +'<i class="fa fa-remove"></i> Del </button>';
+                        }
+                    }
+
+                ], initComplete: function () {
+                    var api = this.api();
+                    $('.dataTables_filter input')
+                        .off('.DT')
+                        .on('keyup.DT', function (e) {
+                            if (e.keyCode == 13) {
+                                api.search(this.value).draw();
+                            }
+                        });
+
+                    //$('.datefield').each(function (i, el) {
+                    //    var txt = $(el).text();
+                    //    var dateStr = moment.unix(parseInt(txt) / 1000).format("DD-MM-YYYY");
+                    //    //var date = new Date(parseInt(txt));
+                    //    $(el).text(dateStr);
+                    //});
+                },
+
+            });
+
+            $.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
+                console.log(message);
+            };
+            $(document).on('click', '.btnEdit', function () {
+                var id = $(this).data('userId');
+                location.href = '@Url.Content("~/Staffs/Add/")' + id.toUpperCase();
+            });
+             $(document).on('click', '.btnDelete', function () {
+                var userId = $(this).data('userId');
+                var username = $(this).data('userName');
+                if (confirm("Are your sure to delete customer " + username + " ?")) {
+                    location.href = '@Url.Content("~/Staffs/DeleteAsync/")' + userId;
+                }
+            });
+
+
+            @*$('.btnEdit').on('click', function (e) {
                 //var userId = $(this).data('userId');
                 var id = $(this).data('userId');
                 //console.log($(this).data());
-                location.href = '@Url.Content("~/Customers/Edit/")' + id.toUpperCase();
+                location.href = '@Url.Content("~/Staffs/Edit/")' + id.toUpperCase();
             });
-            $('.btnDelete').click(function (e)
-            {
+                           $('.btnDelete').click(function (e) {
                 var userId = $(this).data('userId');
                 var username = $(this).data('userName');
-                if (confirm("Are your sure to delete customer " + username+" ?")) {
+                if (confirm("Are your sure to delete customer " + username + " ?")) {
 
-                    location.href = '@Url.Content("~/Customers/DeleteAsync/")' + userId;
+                    location.href = '@Url.Content("~/Staffs/DeleteAsync/")' + userId;
                 }
 
-
-
-
             });
-          
-            $('.datefield').each(function (i, el) {
-                var txt = $(el).text();
-                var dateStr=moment.unix(parseInt(txt)/1000).format("DD-MM-YYYY");
-                //var date = new Date(parseInt(txt));
-                $(el).text(dateStr);
-            });
-            
+
+                *@
         });
-        function timeConverter(UNIX_timestamp) {
-            var a = new Date(UNIX_timestamp * 1000);
-            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            var year = a.getFullYear();
-            var month = months[a.getMonth()];
-            var date = a.getDate();
-            var hour = a.getHours();
-            var min = a.getMinutes();
-            var sec = a.getSeconds();
-            var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
-            return time;
-        }
+
     </script>
 
     <!-- page script -->
     <script>
         $(function () {
             //$('#example1').DataTable()
-            $('#tbl_user').DataTable({
-                'paging': true,
-                'lengthChange': true,
-                'searching': true,
-                'ordering': true,
-                'info': true,
-                'autoWidth': false
-            })
+            //$('#tbl_user').DataTable({
+            //    'paging': true,
+            //    'lengthChange': true,
+            //    'searching': true,
+            //    'ordering': true,
+            //    'info': true,
+            //    'autoWidth': false
+            //})
         })
+
+
     </script>
 
     <!-- Menu Active -->
