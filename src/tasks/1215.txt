@@ -1,0 +1,36 @@
+STAFF Management
+//DONE
+Login error, The iCheck checkbox is error!
+Add Customers with StaffId
+List Customers By StaffId
+Staff/Edit: Start 4:22 => 5:08
+Edit Customer, Disable Change StaffId for Staff 5:08=>7:30
+//CURRENT TASK
+Allow Admin Change Staff to another staff
+
+//TASKS
+Add Manager To Role
+Allow Role To See All Customers, All Staffs
+Allow Role To change Staff of an Customer!
+
+When Staff Login
++Add Customer: Add StaffCode To Customer
+
++Each Staff list Customer of themself.
+
+When Manager or Admin Login
++List All Staffs, List All Customer
+
+Home/Index
++List Number Of Staffs
++List Number Of Customers
+
+
+
+Login Staff, Create a Customer
+
+How to Privs:
++Staff Login can see all their  Customers
++Admin loginn can see all Customers
+
+When you have an idea, note it, don't save in your head. Because you will have a noisy mind and your work is not productivity => Keep simple and stupid, Only one task one time

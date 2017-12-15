@@ -27,7 +27,7 @@ using System.Net;
 namespace BK.StaffManagement.Controllers
 {
     [Authorize]
-    //[Route("[controller]/[action]")]
+    [Route("[controller]/[action]")]
     public class StaffsController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -51,6 +51,7 @@ namespace BK.StaffManagement.Controllers
 
 
         // GET: /<controller>/
+        [HttpGet]
         public IActionResult Index()
         {
             //var staffs = _staffRepository.All();
@@ -64,8 +65,8 @@ namespace BK.StaffManagement.Controllers
         {
 
             //EditCustomerViewModel editCustomer = new EditCustomerViewModel();
-            var customer = new StaffViewModel();
-            return View(customer);
+            var staff = new StaffViewModel();
+            return View(staff);
 
         }
         [HttpPost]
@@ -129,8 +130,9 @@ namespace BK.StaffManagement.Controllers
         public IActionResult IndexAjax(DataTableParamViewModel param)
         {
             var requestFormData = Request.Form;
-            var total = _staffRepository.Count();
-            var listItems = _staffRepository.All(param.search.value, param.length, param.start);
+            var search = param.search.value;
+            var total = _staffRepository.Count(search);
+            var listItems = _staffRepository.All(search, param.length, param.start);
             return Json(new
             {
                 Data = listItems,
@@ -139,7 +141,73 @@ namespace BK.StaffManagement.Controllers
                 RecordsTotal = total
             });
         }
-       
+        [HttpGet("{id}")]
+        public IActionResult Edit(string id)
+        {
+
+            //EditCustomerViewModel editCustomer = new EditCustomerViewModel();
+            var staff = _staffRepository.Get(id);
+            return View(staff);
+
+        }
+
+        [HttpPost("{id}")]
+        //public async Task<IActionResult> AddAsync(EditCustomerViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Edit(StaffViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(model.Id);
+
+                // Update it with the values from the view model
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.UserName = model.UserName;
+                user.Email = model.Email;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Address = model.Address; //custom property
+                user.Description = model.Description;
+                if (!string.IsNullOrWhiteSpace(model.Password))
+                    user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, model.Password);
+                try
+                {
+                    var result = await _userManager.UpdateAsync(user);
+
+                    if (result.Succeeded)
+                    {
+                        var staff = _staffRepository.Get(user.Id);
+                        var staffParam = new DynamicParameters();
+                        staffParam.Add(nameof(Staff.Id), user.Id);
+                        staffParam.Add(nameof(Staff.StaffCode), staff.StaffCode); //Don't allow your user to edit
+                        staffParam.Add(nameof(Staff.Title), model.Title);
+                        staffParam.Add(nameof(Staff.Salary), model.Salary);
+                        //var createdAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
+
+
+                        var unixHireDate = ConvertStringToUnixTimestamp(model.HireDateStr);
+                        staffParam.Add(nameof(Staff.HireDate), unixHireDate);
+
+                        _staffRepository.Update(user.Id,staffParam);
+                        _staffRepository.Commit();
+                        _logger.LogInformation("Staff updated.");
+                        //return RedirectToLocal(returnUrl);
+                        return RedirectToAction(nameof(StaffsController.Index), "Staffs");
+                    }
+                    AddErrors(result);
+
+                }
+                catch (Exception ex)
+                {
+                    _staffRepository.RollBack();
+                    _logger.LogError(default(EventId), ex, "Error updating staff");
+                    throw;
+                }
+            }
+
+
+            return View(model);
+        }
 
         /// <summary>
         /// Get a list of Items

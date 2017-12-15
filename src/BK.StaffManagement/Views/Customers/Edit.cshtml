@@ -29,6 +29,14 @@
                             <div class=" col-md-6">
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <div class="form-group">
+                                    <label asp-for="CustomerCode" class="col-md-3 control-label"></label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" value="@Model.CustomerCode" disabled>
+                                        <input type="hidden" asp-for="CustomerCode" value="@Model.CustomerCode">
+                                        <span asp-validation-for="CustomerCode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label asp-for="Username" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
                                         <input type="text" class="form-control" value="@Model.Username" disabled>
@@ -39,36 +47,36 @@
                                 <div class="form-group">
                                     <label asp-for="Password" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <input type="password" asp-for="Password" class="form-control"  value="@Model.Password"/>
+                                        <input type="password" asp-for="Password" class="form-control" value="@Model.Password" />
                                         <span asp-validation-for="Password" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="ConfirmPassword" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <input type="password" asp-for="ConfirmPassword" class="form-control"  value="@Model.ConfirmPassword"/>
+                                        <input type="password" asp-for="ConfirmPassword" class="form-control" value="@Model.ConfirmPassword" />
                                         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="FirstName" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <input type="text" asp-for="FirstName" class="form-control"  value="@Model.FirstName"/>
+                                        <input type="text" asp-for="FirstName" class="form-control" value="@Model.FirstName" />
                                         <span asp-validation-for="FirstName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="LastName" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <input type="text" asp-for="LastName" class="form-control"  value="@Model.LastName"/>
+                                        <input type="text" asp-for="LastName" class="form-control" value="@Model.LastName" />
                                         <span asp-validation-for="LastName" class="text-danger"></span>
                                     </div>
-                                </div>
+                                </div>   
                                 <div class="form-group">
-                                    <label asp-for="CustomerCode" class="col-md-3 control-label"></label>
+                                    <label asp-for="StaffId" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <input type="text" asp-for="CustomerCode" class="form-control"  value="@Model.CustomerCode"/>
-                                        <span asp-validation-for="CustomerCode" class="text-danger"></span>
+                                        <select asp-for="StaffId"  disabled="disabled"  asp-items="@Model.Staffs"
+                                                class="form-control select2"></select>
                                     </div>
                                 </div>
                             </div>
@@ -76,7 +84,7 @@
                                 <div class="form-group">
                                     <label asp-for="PhoneNumber" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <input type="text" asp-for="PhoneNumber" class="form-control"  value="@Model.PhoneNumber"/>
+                                        <input type="text" asp-for="PhoneNumber" class="form-control" value="@Model.PhoneNumber" />
                                         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -104,7 +112,7 @@
                                 <div class="form-group">
                                     <label asp-for="Description" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <textarea asp-for="Description" class="form-control" rows="5"  value="@Model.Description"></textarea>
+                                        <textarea asp-for="Description" class="form-control" rows="5" value="@Model.Description"></textarea>
                                         <span asp-validation-for="Description" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -143,7 +151,8 @@
         $(document).ready(function () {
             // Active Menu
             //$('.menu_user').parent().addClass('active').closest('.treeview').addClass('active');
-
+            //Initialize Select2 Elements
+            $('.select2').select2()
         });
     </script>
 

@@ -1,27 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using BK.StaffManagement.Models;
-using BK.StaffManagement.Models.AccountViewModels;
-using BK.StaffManagement.Services;
-using Microsoft.Extensions.Configuration;
 using System.Data;
 using Dapper;
 using BK.StaffManagement.ViewModels;
-using AutoMapper;
 using BK.StaffManagement.Enums;
 using BK.StaffManagement.Repositories;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using BK.StaffManagement.Data;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BK.StaffManagement.Controllers
 {
@@ -31,6 +20,7 @@ namespace BK.StaffManagement.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly CustomerRepository _customerRepository;
+        private readonly StaffRepository _staffRepository;
         private readonly ILogger _logger;
         private readonly IDbConnection _connection;
         protected IDbTransaction Transaction;
@@ -38,11 +28,13 @@ namespace BK.StaffManagement.Controllers
             UserManager<ApplicationUser> userManager,
             IDbConnection conn,
             CustomerRepository customerRepository,
+            StaffRepository staffRepository,
             ILogger<AccountController> logger,
             IDbTransaction trans)
         {
             _userManager = userManager;
             _customerRepository = customerRepository;
+            _staffRepository = staffRepository;
             _connection = conn;
             _logger = logger;
             Transaction = trans;
@@ -50,7 +42,8 @@ namespace BK.StaffManagement.Controllers
 
         public IActionResult Index()
         {
-            var customers = _customerRepository.All();
+            var loginUserId = _userManager.GetUserId(User);
+            var customers = _customerRepository.All(loginUserId);
             return View(customers);
 
 
@@ -58,17 +51,19 @@ namespace BK.StaffManagement.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-           
+
             //EditCustomerViewModel editCustomer = new EditCustomerViewModel();
-            var customer = new CustomerViewModel();
-            return View(customer);
+            //var customer = new CustomerViewModel();
+            //return View(customer);
+            return View();
             
         }
         [HttpPost]
         //public async Task<IActionResult> AddAsync(EditCustomerViewModel model, string returnUrl = null)
-        public async Task<IActionResult> AddAsync(CustomerViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Add(CustomerViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            var loginUserId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser {
@@ -93,7 +88,7 @@ namespace BK.StaffManagement.Controllers
                         var customerParam = new DynamicParameters();
                         customerParam.Add(nameof(Customer.Id), user.Id);
                         customerParam.Add(nameof(Customer.CustomerCode), model.CustomerCode);
-                        customerParam.Add(nameof(Customer.StaffId), user.Id);
+                        customerParam.Add(nameof(Customer.StaffId), loginUserId);
                         customerParam.Add(nameof(Customer.DebitBalance), model.DebitBalance);
 
                         _customerRepository.Create(customerParam);
@@ -119,8 +114,19 @@ namespace BK.StaffManagement.Controllers
         [HttpGet("{id}")]
         public IActionResult Edit(string id)
         {
-            var editEustomer = _customerRepository.Get(id);
-            return View(editEustomer);
+            var customer = _customerRepository.Get(id);
+
+            var staffs = _staffRepository.AllUser();
+
+            customer.Staffs = staffs.Select(x =>
+            {
+                return new SelectListItem()
+                {
+                    Text = x.StaffCode+" - "+x.Username+" - "+x.LastName+" "+x.FirstName,
+                    Value = x.Id
+                };
+            });
+            return View(customer);
 
         }
 
@@ -130,6 +136,7 @@ namespace BK.StaffManagement.Controllers
         {
             if (ModelState.IsValid)
             {
+
 
                 var user = await  _userManager.FindByIdAsync(model.Id);
 
@@ -159,17 +166,82 @@ namespace BK.StaffManagement.Controllers
                     {
                         //var role = StringEnum.GetStringValue(RoleType.Customer);
                         //var result1 = await _userManager.AddToRoleAsync(user, role);
-
+                        var customer=_customerRepository.Get(user.Id);
                         var customerParam = new DynamicParameters();
-                        customerParam.Add(nameof(Customer.CustomerCode), model.CustomerCode);
-                        customerParam.Add(nameof(Customer.StaffId), user.Id);
+                        customerParam.Add(nameof(Customer.CustomerCode), customer.CustomerCode);
+                        customerParam.Add(nameof(Customer.StaffId), model.StaffId); //Staff can transfer the Customer for another Staff to manage;!= impersonate
                         customerParam.Add(nameof(Customer.DebitBalance), model.DebitBalance);
 
                         _customerRepository.Update(user.Id, customerParam);
                         _customerRepository.Commit();
                         _logger.LogInformation("Customer updated");
                         //return RedirectToLocal(returnUrl);
-                        return RedirectToAction(nameof(CustomersController.Edit), "Customers", new {id=user.Id });
+                        return RedirectToAction(nameof(CustomersController.Index), "Customers");
+                        //return RedirectToAction(nameof(CustomersController.Index), "Customers");
+                    }
+                    AddErrors(result);
+                    return View(model);
+                }
+                catch (Exception ex)
+                {
+                    _customerRepository.RollBack();
+                    _logger.LogError(default(EventId), ex, "Error updating customer");
+                    throw;
+                }
+            }
+
+
+            return View(model);
+        }
+
+        [HttpGet()]
+        public IActionResult Profile()
+        {
+            var username = _userManager.GetUserName(User);
+            var customer = _customerRepository.GetByUsername(username);
+            return View(customer);
+
+        }
+        [HttpPost]
+        //public async Task<IActionResult> Edit(string id, EditCustomerViewModel model)
+        public async Task<IActionResult> Profile( CustomerViewModel model)
+        {
+            //var username = _userManager.GetUserName(User);
+            
+            if (ModelState.IsValid)
+            {
+
+                var user = await _userManager.FindByIdAsync(model.Id);
+
+                // Update it with the values from the view model
+                //user.FirstName = model.FirstName;
+                //user.LastName = model.LastName;
+                //user.UserName = model.UserName;
+                //user.Email = model.Email;
+                //user.PhoneNumber = model.PhoneNumber;
+                //user.Address = model.Address; 
+                //user.Description = model.Description;
+                if (!string.IsNullOrWhiteSpace(model.Password))
+                    user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, model.Password);
+                try
+                {
+                    var result = await _userManager.UpdateAsync(user);
+
+                    if (result.Succeeded)
+                    {
+                        //var role = StringEnum.GetStringValue(RoleType.Customer);
+                        //var result1 = await _userManager.AddToRoleAsync(user, role);
+
+                        //var customerParam = new DynamicParameters();
+                        //customerParam.Add(nameof(Customer.CustomerCode), model.CustomerCode);
+                        //customerParam.Add(nameof(Customer.StaffId), user.Id);
+                        //customerParam.Add(nameof(Customer.DebitBalance), model.DebitBalance);
+
+                        //_customerRepository.Update(user.Id, customerParam);
+                        _customerRepository.Commit();
+                        _logger.LogInformation("Customer Password updated");
+                        //return RedirectToLocal(returnUrl);
+                        return RedirectToAction(nameof(CustomersController.Index), "Customers", new { id = user.Id });
                         //return RedirectToAction(nameof(CustomersController.Index), "Customers");
                     }
                     AddErrors(result);

@@ -1,4 +1,5 @@
 ﻿using BK.StaffManagement.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,6 +15,7 @@ namespace BK.StaffManagement.ViewModels
         //public virtual string CustomerCode { get; set; }
 
         //public virtual decimal DebitBalance { get; set; } = 0;
+        public IEnumerable<SelectListItem> Staffs { get; set; }
 
         [Display(Name = "Id")]
         public string Id { get; set; }
@@ -58,7 +60,7 @@ namespace BK.StaffManagement.ViewModels
         [Display(Name = "Description")]
         public string Description { get; set; }
 
-        [Display(Name = "StaffId")]
+        [Display(Name = "Staff")]
         public string StaffId { get; set; }
     }
 }

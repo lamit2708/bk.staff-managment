@@ -7,11 +7,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Customer Management
+        Staff Management
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Customer</a></li>
-        <li class="active><a href="#">List</a></li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> Staff</a></li>
+        <li class="active"><a href="#">List</a></li>
 
     </ol>
 </section>
@@ -46,51 +46,21 @@
 
                             </tr>
                         </thead>
-                        @* <tbody>
-                            @foreach (var u in Model)
-                             {
-                                 <tr>
-
-                                     <td>@u.UserName</td>
-                                     <td>@u.StaffCode</td>
-                                     <td>@u.Title</td>
-                                     <td>@u.PhoneNumber</td>
-                                     <td>@u.Address</td>
-                                     <td>@u.Email</td>
-                                     <td>@u.Salary</td>
-                                     <td class="datefield">@u.HireDate</td>
-                                     <td>
-
-                                         <button type="button" data-user-id="@u.Id" data-user-name="@u.UserName"
-                                                 class="btnEdit btn btn-success pull-right" style="margin-right: 5px;">
-                                             <i class="fa fa-edit"></i> Edit
-                                         </button>
-
-                                     </td>
-                                     <td>
-                                         <button data-user-id="@u.Id"
-                                                 data-user-name="@u.UserName" type="button" class="btnDelete btn btn-danger pull-right">
-                                             <i class="fa fa-remove"></i> Del
-                                         </button>
-                                     </td>
-
-                                 </tr>
-                             }
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <th>User Name</th>
-                                                        <th>Staff Code</th>
-                                                        <th>Title</th>
-                                                        <th>Phone Number</th>
-                                                        <th>Address</th>
-                                                        <th>Email</th>
-                                                        <th>Salary</th>
-                                                        <th>HireDate</th>
-                                                        <th>Edit</th>
-                                                        <th>Delete</th>
-                                                    </tr>
-                                                </tfoot>
+                        @* 
+                            <tfoot>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>Staff Code</th>
+                                    <th>Title</th>
+                                    <th>Phone Number</th>
+                                    <th>Address</th>
+                                    <th>Email</th>
+                                    <th>Salary</th>
+                                    <th>HireDate</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </tfoot>
                         *@
                     </table>
                 </div>
@@ -119,9 +89,6 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-
-
-
 
             oTable=$('#tbl_user').DataTable({
                 processing: true,
@@ -215,54 +182,23 @@
             };
             $(document).on('click', '.btnEdit', function () {
                 var id = $(this).data('userId');
-                location.href = '@Url.Content("~/Staffs/Add/")' + id.toUpperCase();
+                location.href = '@Url.Content("~/Staffs/Edit/")' + id.toUpperCase();
             });
              $(document).on('click', '.btnDelete', function () {
                 var userId = $(this).data('userId');
                 var username = $(this).data('userName');
-                if (confirm("Are your sure to delete customer " + username + " ?")) {
+                if (confirm("Are your sure to delete staff " + username + " ?")) {
                     location.href = '@Url.Content("~/Staffs/DeleteAsync/")' + userId;
                 }
             });
 
 
-            @*$('.btnEdit').on('click', function (e) {
-                //var userId = $(this).data('userId');
-                var id = $(this).data('userId');
-                //console.log($(this).data());
-                location.href = '@Url.Content("~/Staffs/Edit/")' + id.toUpperCase();
-            });
-                           $('.btnDelete').click(function (e) {
-                var userId = $(this).data('userId');
-                var username = $(this).data('userName');
-                if (confirm("Are your sure to delete customer " + username + " ?")) {
-
-                    location.href = '@Url.Content("~/Staffs/DeleteAsync/")' + userId;
-                }
-
-            });
-
-                *@
+           
         });
 
     </script>
 
-    <!-- page script -->
-    <script>
-        $(function () {
-            //$('#example1').DataTable()
-            //$('#tbl_user').DataTable({
-            //    'paging': true,
-            //    'lengthChange': true,
-            //    'searching': true,
-            //    'ordering': true,
-            //    'info': true,
-            //    'autoWidth': false
-            //})
-        })
 
-
-    </script>
 
     <!-- Menu Active -->
     <script type="text/javascript">

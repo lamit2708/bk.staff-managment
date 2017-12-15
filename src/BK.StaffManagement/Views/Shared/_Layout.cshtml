@@ -9,6 +9,8 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <!-- Select2 -->
+        <link rel="stylesheet" href="~/lib/select2/dist/css/select2.css">
         <link rel="stylesheet" href="~/css/AdminLTE.min.css" />
         @*<link rel="stylesheet" href="~/css/bootstrap-editable.css" />*@
     </environment>
@@ -17,6 +19,8 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <!-- Select2 -->
+        <link rel="stylesheet" href="~/lib/select2/dist/css/select2.css">
         <link rel="stylesheet" href="~/css/AdminLTE.min.css" />
         @*<link rel="stylesheet" href="~/css/bootstrap-editable.css" />*@
     </environment>
@@ -50,6 +54,8 @@
         <script src="~/lib/jquery-slimscroll/jquery.slimscroll.min.js"></script>
         <!-- FastClick -->
         <script src="~/lib/fastclick/lib/fastclick.js"></script>
+        <!-- Select2 -->
+        <script src="~/lib/select2/dist/js/select2.full.min.js"></script>
         @*<script src="~/lib/lodash/debounce.js"></script>*@
     </environment>
     <environment names="Staging,Production">
@@ -76,24 +82,25 @@
         <script src="~/lib/jquery-slimscroll/jquery.slimscroll.min.js"></script>
         <!-- FastClick -->
         <script src="~/lib/fastclick/lib/fastclick.js"></script>
-        @*<script src="~/lib/lodash/debounce.js"></script>*@
+        <!-- Select2 -->
+        <script src="~/lib/select2/dist/js/select2.full.min.js"></script>
     </environment>
 
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 
     @*<div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2017 - BK.UserManagement.Web</p>
-        </footer>
-    </div>*@
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; 2017 - BK.UserManagement.Web</p>
+            </footer>
+        </div>*@
     <div class="wrapper">
         <!-- Main Header -->
         <header class="main-header">
             <!-- Logo -->
-            <a href="@Url.Action(" Index", "Home" )" class="logo">
+            <a href="@Url.Action("Index", "Home" )" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini"><b>U</b>@*RM*@</span>
                 <!-- logo for regular state and mobile devices -->
@@ -107,7 +114,7 @@
                 </a>
                 <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
-                   
+
                     @await Html.PartialAsync("_LoginPartial")
                 </div>
             </nav>
@@ -119,48 +126,61 @@
 
                 <!-- search form (Optional) -->
                 @*<form action="#" method="get" class="sidebar-form">
-                    <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="Search...">
-                        <span class="input-group-btn">
-                            <button type="submit" name="search" id="search-btn" class="btn btn-flat">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </span>
-                    </div>
-                </form>*@
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="Search...">
+                            <span class="input-group-btn">
+                                <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </form>*@
                 <!-- /.search form -->
                 <!-- Sidebar Menu -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <!-- Optionally, you can add icons to the links -->
-                    <li><a class="menu_account" asp-controller="Account" asp-action="Logon"><i class="fa fa-user"></i> <span>Account</span></a></li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-users"></i> <span>Customer</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a class="menu_add" asp-controller="Customers" asp-action="Add">Add Customer</a></li>
-                            <li><a class="menu_user" asp-controller="Customers" asp-action="Index">List Customer</a></li>s
-                        </ul>
-                    </li>
+                    @if (User.IsInRole(StringEnum.GetStringValue(RoleType.Customer)))
+                    {
+                        <li><a class="menu_account" asp-controller="Customers" asp-action="Profile"><i class="fa fa-user"></i> <span>Customer Profile</span></a></li>
+                    }
+                    @if (User.IsInRole(StringEnum.GetStringValue(RoleType.Staff))
+                        || User.IsInRole(StringEnum.GetStringValue(RoleType.Admin)))
+                    {
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-users"></i> <span>Customer</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a class="menu_add" asp-controller="Customers" asp-action="Add">Add Customer</a></li>
+                                <li><a class="menu_user" asp-controller="Customers" asp-action="Index">List Customer</a></li>s
+                            </ul>
+                        </li>
+                    }
                     <!--
                          <li><a class="menu_dashboard" asp-controller="Home" asp-action="Dashboard"><i class="fa fa-shield"></i> <span>Role</span></a></li>
                     -->
+                    
+                    @if (User.IsInRole(StringEnum.GetStringValue(RoleType.Admin)))
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-user-secret"></i> <span>Staff</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a class="menu_create_role" asp-controller="Staffs" asp-action="Add">Add Staff</a></li>
+                                <li><a class="menu_list_role" asp-controller="Staffs" asp-action="Index">List Staff</a></li>
 
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-user-secret"></i> <span>Staff</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a class="menu_create_role" asp-controller="Staffs" asp-action="Add">Add Staff</a></li>
-                            <li><a class="menu_list_role" asp-controller="Staffs" asp-action="Index">List Staff</a></li>
-                        </ul>
-                    </li>
+                            </ul>
+                        </li>
+                    }
+
 
 
                 </ul>
@@ -255,7 +275,7 @@
 
     <div id="ModalView"></div>
 
-   
+
 
     @RenderSection("Scripts", required: false)
     <script>

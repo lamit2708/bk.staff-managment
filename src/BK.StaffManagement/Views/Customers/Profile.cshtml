@@ -1,0 +1,144 @@
+﻿@using BK.StaffManagement.ViewModels
+@model CustomerViewModel
+@{
+    ViewData["Title"] = "Customer Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>Customer Profile</h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Customer</a></li>
+        <li class="active">Profile</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <form asp-controller="Customers" asp-action="Profile" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+        <div class="row">
+            <div class=" col-md-12">
+                <div class="box box-warning">
+                    <div class="box-header with-border">
+                        @*<h3 class="box-title">General Elements</h3>*@
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class=" col-md-6">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="Username" class="col-md-3 control-label"></label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" value="@Model.Username" disabled>
+                                        <input type="hidden" asp-for="Username" value="@Model.Username">
+                                        <span asp-validation-for="Username" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Password" class="col-md-3 control-label"></label>
+                                    <div class="col-md-9">
+                                        <input type="password" asp-for="Password" class="form-control" value="@Model.Password" />
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="ConfirmPassword" class="col-md-3 control-label"></label>
+                                    <div class="col-md-9">
+                                        <input type="password" asp-for="ConfirmPassword" class="form-control" value="@Model.ConfirmPassword" />
+                                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="FirstName" class="col-md-3 control-label"></label>
+                                    <div class="col-md-9">
+                                        <input type="text" asp-for="FirstName" class="form-control" value="@Model.FirstName" />
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="LastName" class="col-md-3 control-label"></label>
+                                    <div class="col-md-9">
+                                        <input type="text" asp-for="LastName" class="form-control" value="@Model.LastName" />
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="CustomerCode" class="col-md-3 control-label"></label>
+                                    <div class="col-md-9">
+                                        <input type="text" asp-for="CustomerCode" class="form-control" value="@Model.CustomerCode" />
+                                        <span asp-validation-for="CustomerCode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="PhoneNumber" class="col-md-3 control-label"></label>
+                                    <div class="col-md-9">
+                                        <input type="text" asp-for="PhoneNumber" class="form-control" value="@Model.PhoneNumber" />
+                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Address" class="col-md-3 control-label"></label>
+                                    <div class="col-md-9">
+                                        <input type="text" asp-for="Address" class="form-control" value="@Model.Address" />
+                                        <span asp-validation-for="Address" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Email" class="col-md-3 control-label"></label>
+                                    <div class="col-md-9">
+                                        <input type="text" asp-for="Email" class="form-control" value="@Model.Email" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="DebitBalance" class="col-md-3 control-label"></label>
+                                    <div class="col-md-9">
+                                        <input type="text" asp-for="DebitBalance" class="form-control" value="@Model.DebitBalance" />
+                                        <span asp-validation-for="DebitBalance" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Description" class="col-md-3 control-label"></label>
+                                    <div class="col-md-9">
+                                        <textarea asp-for="Description" class="form-control" rows="5" value="@Model.Description"></textarea>
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="submit" class="btn btn-success">Update your Password</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-md-6"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</section>
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Active Menu
+            //$('.menu_user').parent().addClass('active').closest('.treeview').addClass('active');
+
+        });
+    </script>
+
+}
+
+

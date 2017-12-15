@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BK.StaffManagement.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private UserManager<ApplicationUser> _userManager;
