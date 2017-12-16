@@ -88,7 +88,7 @@ INNER JOIN AspNetUsers u ON c.Id = u.Id", (c, u) =>
             return customers;
         }
 
-        public IEnumerable<CustomerViewModel> All(string staffId)
+        public IEnumerable<CustomerViewModel> AllByStaffId(string staffId)
         {
             var mapper = new MapperConfiguration(cfg => {
                 cfg.CreateMap<ApplicationUser, CustomerViewModel>();

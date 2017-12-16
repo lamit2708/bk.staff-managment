@@ -436,8 +436,9 @@ namespace BK.StaffManagement.Controllers
 
 
         [HttpGet]
-        public IActionResult AccessDenied()
+        public IActionResult AccessDenied(string returnUrl)
         {
+            ViewData["returnUrl"] = returnUrl;
             return View();
         }
 

@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using BK.StaffManagement.Models;
-using BK.StaffManagement.Models.AccountViewModels;
-using BK.StaffManagement.Services;
-using Microsoft.Extensions.Configuration;
 using System.Data;
 using Dapper;
 using BK.StaffManagement.Repositories;
@@ -21,8 +14,6 @@ using BK.StaffManagement.ViewModels;
 using BK.StaffManagement.Enums;
 using Microsoft.AspNetCore.Http;
 using System.Reflection;
-using System.Net.Http;
-using System.Net;
 
 namespace BK.StaffManagement.Controllers
 {
@@ -52,6 +43,7 @@ namespace BK.StaffManagement.Controllers
 
         // GET: /<controller>/
         [HttpGet]
+        [Authorize(Roles = UserRole.Admin)]
         public IActionResult Index()
         {
             //var staffs = _staffRepository.All();
@@ -61,6 +53,7 @@ namespace BK.StaffManagement.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = UserRole.Admin)]
         public IActionResult Add()
         {
 
@@ -70,6 +63,7 @@ namespace BK.StaffManagement.Controllers
 
         }
         [HttpPost]
+        [Authorize(Roles = UserRole.Admin)]
         //public async Task<IActionResult> AddAsync(EditCustomerViewModel model, string returnUrl = null)
         public async Task<IActionResult> Add(StaffViewModel model, string returnUrl = null)
         {
@@ -127,6 +121,7 @@ namespace BK.StaffManagement.Controllers
             return View(model);
         }
         [HttpPost]
+        [Authorize(Roles = UserRole.Admin)]
         public IActionResult IndexAjax(DataTableParamViewModel param)
         {
             var requestFormData = Request.Form;
@@ -142,6 +137,7 @@ namespace BK.StaffManagement.Controllers
             });
         }
         [HttpGet("{id}")]
+        [Authorize(Roles = UserRole.Admin)]
         public IActionResult Edit(string id)
         {
 
@@ -152,6 +148,7 @@ namespace BK.StaffManagement.Controllers
         }
 
         [HttpPost("{id}")]
+        [Authorize(Roles = UserRole.Admin)]
         //public async Task<IActionResult> AddAsync(EditCustomerViewModel model, string returnUrl = null)
         public async Task<IActionResult> Edit(StaffViewModel model, string returnUrl = null)
         {

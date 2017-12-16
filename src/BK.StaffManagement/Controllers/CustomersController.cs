@@ -11,6 +11,7 @@ using BK.StaffManagement.Enums;
 using BK.StaffManagement.Repositories;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BK.StaffManagement.Controllers
 {
@@ -39,16 +40,25 @@ namespace BK.StaffManagement.Controllers
             _logger = logger;
             Transaction = trans;
         }
-
+        [Authorize(Roles = UserRole.Staff+","+UserRole.Admin)]
         public IActionResult Index()
         {
-            var loginUserId = _userManager.GetUserId(User);
-            var customers = _customerRepository.All(loginUserId);
-            return View(customers);
 
+            if (User.IsInRole(StringEnum.GetStringValue(RoleType.Admin)))
+            {
+                var customers = _customerRepository.All();
+                return View(customers);
+            }else if (User.IsInRole(StringEnum.GetStringValue(RoleType.Staff)))
+            {
+                var userId = _userManager.GetUserId(User);
+                var customers = _customerRepository.AllByStaffId(userId);
+                return View(customers);
+            }
+            return View();
 
         }
         [HttpGet]
+        [Authorize(Roles = UserRole.Staff)]
         public IActionResult Add()
         {
 
@@ -112,6 +122,7 @@ namespace BK.StaffManagement.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = UserRole.Staff + "," + UserRole.Admin)]
         public IActionResult Edit(string id)
         {
             var customer = _customerRepository.Get(id);
@@ -131,6 +142,7 @@ namespace BK.StaffManagement.Controllers
         }
 
         [HttpPost("{id}")]
+        [Authorize(Roles = UserRole.Staff + "," + UserRole.Admin)]
         //public async Task<IActionResult> Edit(string id, EditCustomerViewModel model)
         public async Task<IActionResult> Edit(string id, CustomerViewModel model)
         {
@@ -139,7 +151,7 @@ namespace BK.StaffManagement.Controllers
 
 
                 var user = await  _userManager.FindByIdAsync(model.Id);
-
+                var loginUserId = _userManager.GetUserId(User);
                 // Update it with the values from the view model
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
@@ -169,7 +181,7 @@ namespace BK.StaffManagement.Controllers
                         var customer=_customerRepository.Get(user.Id);
                         var customerParam = new DynamicParameters();
                         customerParam.Add(nameof(Customer.CustomerCode), customer.CustomerCode);
-                        customerParam.Add(nameof(Customer.StaffId), model.StaffId); //Staff can transfer the Customer for another Staff to manage;!= impersonate
+                        customerParam.Add(nameof(Customer.StaffId), loginUserId); //Staff can transfer the Customer for another Staff to manage;!= impersonate
                         customerParam.Add(nameof(Customer.DebitBalance), model.DebitBalance);
 
                         _customerRepository.Update(user.Id, customerParam);
@@ -195,6 +207,7 @@ namespace BK.StaffManagement.Controllers
         }
 
         [HttpGet()]
+        [Authorize(Roles = UserRole.Customer)]
         public IActionResult Profile()
         {
             var username = _userManager.GetUserName(User);
@@ -204,6 +217,7 @@ namespace BK.StaffManagement.Controllers
         }
         [HttpPost]
         //public async Task<IActionResult> Edit(string id, EditCustomerViewModel model)
+        [Authorize(Roles = UserRole.Customer)]
         public async Task<IActionResult> Profile( CustomerViewModel model)
         {
             //var username = _userManager.GetUserName(User);
@@ -260,6 +274,7 @@ namespace BK.StaffManagement.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = UserRole.Staff+","+ UserRole.Admin)]
         public async Task<IActionResult> DeleteAsync(string id)
         {
             try

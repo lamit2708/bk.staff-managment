@@ -16,6 +16,13 @@ namespace BK.StaffManagement.Enums
         [StringEnum("CUSTOMER")]
         Customer =3
     }
+    public static class UserRole
+    {
+        public const string Admin = "ADMIN";
+        public const string Staff = "STAFF";
+        public const string Customer = "CUSTOMER";
+
+    }
     public sealed class StringEnum : System.Attribute
     {
 
