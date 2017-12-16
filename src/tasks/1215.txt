@@ -11,7 +11,7 @@ Login by Admin =>Customers/Index show all
 Allow Admin Change Staff to another staff
 
 //TASKS
-
+Add Dashboard: All Customers, All Users
 
 Add Manager To Role
 Allow Role To See All Customers, All Staffs
@@ -31,10 +31,5 @@ Home/Index
 
 
 
-Login Staff, Create a Customer
-
-How to Privs:
-+Staff Login can see all their  Customers
-+Admin loginn can see all Customers
 
 When you have an idea, note it, don't save in your head. Because you will have a noisy mind and your work is not productivity => Keep simple and stupid, Only one task one time

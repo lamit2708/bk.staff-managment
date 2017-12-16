@@ -58,18 +58,26 @@ namespace BK.StaffManagement.Controllers
 
         }
         [HttpGet]
-        [Authorize(Roles = UserRole.Staff)]
+        [Authorize(Roles = UserRole.Staff + "," + UserRole.Admin)]
         public IActionResult Add()
         {
-
-            //EditCustomerViewModel editCustomer = new EditCustomerViewModel();
-            //var customer = new CustomerViewModel();
-            //return View(customer);
-            return View();
+            var customer = new CustomerViewModel();
+            var staffs = _staffRepository.AllUser();
+            var loginUserId = _userManager.GetUserId(User);
+            customer.StaffId = loginUserId;
+            customer.Staffs = staffs.Select(x =>
+            {
+                return new SelectListItem()
+                {
+                    Text = x.StaffCode + " - " + x.Username + " - " + x.LastName + " " + x.FirstName,
+                    Value = x.Id
+                };
+            });
+            return View(customer);
             
         }
         [HttpPost]
-        //public async Task<IActionResult> AddAsync(EditCustomerViewModel model, string returnUrl = null)
+        [Authorize(Roles = UserRole.Staff + "," + UserRole.Admin)]
         public async Task<IActionResult> Add(CustomerViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
