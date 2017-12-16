@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace BK.StaffManagement.Repositories
 {
-   
+
     public class StaffRepository : BaseRepository<Staff>
     {
         public StaffRepository(IDbConnection conn, IDbTransaction trans) : base(conn, trans)
         {
-           
+
         }
         public int Count(string search)
         {
@@ -32,8 +32,9 @@ INNER JOIN AspNetUsers u ON c.Id = u.Id
         }
         public StaffViewModel Get(string id)
         {
-           
-            var mapper = new MapperConfiguration(cfg => {
+
+            var mapper = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<ApplicationUser, StaffViewModel>();
                 cfg.CreateMap<Staff, StaffViewModel>();
             });
@@ -52,31 +53,32 @@ WHERE c.Id='{id}'", (c, u) =>
         }
 
 
-//        public IEnumerable<StaffViewModel> All()
-//        {
-//            var mapper = new MapperConfiguration(cfg => {
-//                cfg.CreateMap<ApplicationUser, StaffViewModel>();
-//                cfg.CreateMap<Staff, StaffViewModel>();
-//            });
-//            var mapperConf = mapper.CreateMapper();
-//            var customers = Connection.Query<Staff, ApplicationUser, StaffViewModel>(@"
-//SELECT c.*, u.* FROM Staff c
-//INNER JOIN AspNetUsers u ON c.Id = u.Id", (c, u) =>
-//            {
-//                var result = mapperConf.Map<StaffViewModel>(u);
-//                result = mapperConf.Map(c, result);
-//                return result;
-//            }, transaction: Transaction,
-//                    splitOn: "Id");
-//            return customers;
-//        }
+        //        public IEnumerable<StaffViewModel> All()
+        //        {
+        //            var mapper = new MapperConfiguration(cfg => {
+        //                cfg.CreateMap<ApplicationUser, StaffViewModel>();
+        //                cfg.CreateMap<Staff, StaffViewModel>();
+        //            });
+        //            var mapperConf = mapper.CreateMapper();
+        //            var customers = Connection.Query<Staff, ApplicationUser, StaffViewModel>(@"
+        //SELECT c.*, u.* FROM Staff c
+        //INNER JOIN AspNetUsers u ON c.Id = u.Id", (c, u) =>
+        //            {
+        //                var result = mapperConf.Map<StaffViewModel>(u);
+        //                result = mapperConf.Map(c, result);
+        //                return result;
+        //            }, transaction: Transaction,
+        //                    splitOn: "Id");
+        //            return customers;
+        //        }
         public IEnumerable<StaffViewModel> All(string search, int? limit = null, int? offset = null)
         {
             var tableName = typeof(Staff).GetTableName();
             limit = limit ?? 100;
             offset = offset ?? 0;
 
-            var mapper = new MapperConfiguration(cfg => {
+            var mapper = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<ApplicationUser, StaffViewModel>();
                 cfg.CreateMap<Staff, StaffViewModel>();
             });
@@ -99,18 +101,19 @@ FETCH NEXT {limit} ROWS ONLY;", (c, u) =>
                     splitOn: "Id");
             return customers;
         }
-        public IEnumerable<StaffViewModel> AllUser( int? limit = null, int? offset = null)
+        public IEnumerable<StaffViewModel> AllUser(int? limit = null, int? offset = null)
         {
             var tableName = typeof(Staff).GetTableName();
             limit = limit ?? 100;
             offset = offset ?? 0;
 
-            var mapper = new MapperConfiguration(cfg => {
+            var mapper = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<ApplicationUser, StaffViewModel>();
                 cfg.CreateMap<Staff, StaffViewModel>();
             });
             var mapperConf = mapper.CreateMapper();
-            
+
             var customers = Connection.Query<Staff, ApplicationUser, StaffViewModel>($@"
 SELECT c.*, u.* FROM [{tableName}] c
 INNER JOIN AspNetUsers u ON c.Id = u.Id

@@ -107,5 +107,26 @@ WHERE c.StaffId = '{staffId}'", (c, u) =>
                     splitOn: "Id");
             return customers;
         }
+
+        public int Count(string search)
+        {
+            var searchCondition = !string.IsNullOrWhiteSpace(search)
+                ? $"WHERE u.FirstName LIKE '%{search}%' OR u.LastName LIKE '%{search}%'"
+                : string.Empty;
+            var count = Connection.Query<int>($@"
+SELECT COUNT(c.Id) FROM Customer c
+INNER JOIN AspNetUsers u ON c.Id = u.Id
+{searchCondition}
+", transaction: Transaction).FirstOrDefault();
+            return count;
+        }
+        public int GetSumDebit()
+        {
+           
+            var count = Connection.Query<int>($@"
+SELECT SUM(c.DebitBalance) FROM Customer c
+", transaction: Transaction).FirstOrDefault();
+            return count;
+        }
     }
 }
