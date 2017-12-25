@@ -215,7 +215,7 @@ namespace BK.StaffManagement.Controllers
         }
 
         [HttpGet()]
-        [Authorize(Roles = UserRole.Customer)]
+        //[Authorize(Roles = UserRole.Customer)]
         public IActionResult Profile()
         {
             var username = _userManager.GetUserName(User);

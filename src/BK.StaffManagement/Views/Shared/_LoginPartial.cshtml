@@ -25,6 +25,14 @@
                                 <a asp-controller="Customers" asp-action="Profile" class="btn btn-primary btn-flat">Profile</a>
                             </div>
                         }
+                        @if (User.IsInRole(StringEnum.GetStringValue(RoleType.Staff))
+                           || User.IsInRole(StringEnum.GetStringValue(RoleType.Admin)))
+                        {
+                            <div class="pull-left">
+                                <a asp-controller="Account" asp-action="Profile" class="btn btn-primary 
+                                   btn-flat">Profile</a>
+                            </div>
+                        }
                         <div class="pull-right">
 
                             <button type="submit" class="btn btn-primary btn-flat">Sign out</button>

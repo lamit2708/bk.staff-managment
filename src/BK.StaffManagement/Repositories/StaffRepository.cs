@@ -21,7 +21,12 @@ namespace BK.StaffManagement.Repositories
         public int Count(string search)
         {
             var searchCondition = !string.IsNullOrWhiteSpace(search)
-                ? $"WHERE u.FirstName LIKE '%{search}%' OR u.LastName LIKE '%{search}%'"
+                ? $"WHERE u.FirstName LIKE '%{search}%' " +
+                $"OR u.LastName LIKE '%{search}%' " +
+                $"OR u.PhoneNumber LIKE '%{search}%'" +
+                $"OR u.Email LIKE '%{search}%'" +
+                $"OR c.Title LIKE '%{search}%' " +
+                $"OR c.StaffCode LIKE '%{search}%' " 
                 : string.Empty;
             var count = Connection.Query<int>($@"
 SELECT COUNT(c.Id) FROM Staff c
@@ -39,7 +44,7 @@ INNER JOIN AspNetUsers u ON c.Id = u.Id
                 cfg.CreateMap<Staff, StaffViewModel>();
             });
             var mapperConf = mapper.CreateMapper();
-            var customer = Connection.Query<Staff, ApplicationUser, StaffViewModel>($@"
+            var staff = Connection.Query<Staff, ApplicationUser, StaffViewModel>($@"
 SELECT c.*, u.* FROM Staff c
 INNER JOIN AspNetUsers u ON c.Id = u.Id
 WHERE c.Id='{id}'", (c, u) =>
@@ -49,7 +54,7 @@ WHERE c.Id='{id}'", (c, u) =>
                 return result;
             }, transaction: Transaction,
                     splitOn: "Id").FirstOrDefault();
-            return customer;
+            return staff;
         }
 
 
@@ -84,7 +89,12 @@ WHERE c.Id='{id}'", (c, u) =>
             });
             var mapperConf = mapper.CreateMapper();
             var searchCondition = !string.IsNullOrWhiteSpace(search)
-                ? $"WHERE u.FirstName LIKE '%{search}%' OR u.LastName LIKE '%{search}%'"
+                ? $"WHERE u.FirstName LIKE '%{search}%' " +
+                $"OR u.LastName LIKE '%{search}%'" +
+                $"OR u.PhoneNumber LIKE '%{search}%'" +
+                $"OR u.Email LIKE '%{search}%'" +
+                $"OR c.Title LIKE '%{search}%' " +
+                $"OR c.StaffCode LIKE '%{search}%' "
                 : string.Empty;
             var customers = Connection.Query<Staff, ApplicationUser, StaffViewModel>($@"
 SELECT c.*, u.* FROM [{tableName}] c

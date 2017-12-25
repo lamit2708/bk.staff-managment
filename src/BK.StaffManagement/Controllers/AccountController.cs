@@ -13,6 +13,10 @@ using Microsoft.Extensions.Options;
 using BK.StaffManagement.Models;
 using BK.StaffManagement.Models.AccountViewModels;
 using BK.StaffManagement.Services;
+using BK.StaffManagement.Enums;
+using BK.StaffManagement.Repositories;
+using AutoMapper;
+using BK.StaffManagement.ViewModels;
 
 namespace BK.StaffManagement.Controllers
 {
@@ -22,17 +26,20 @@ namespace BK.StaffManagement.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly CustomerRepository _customerRepository;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            CustomerRepository customerRepository,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _customerRepository = customerRepository;
             _emailSender = emailSender;
             _logger = logger;
         }
@@ -441,6 +448,23 @@ namespace BK.StaffManagement.Controllers
             ViewData["returnUrl"] = returnUrl;
             return View();
         }
+
+        [HttpGet()]
+        [Authorize(Roles = UserRole.Staff + "," + UserRole.Admin)]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var mapper = new MapperConfiguration(cfg => {
+                cfg.CreateMap<ApplicationUser, UserViewModel>();
+            });
+            var mapperConf = mapper.CreateMapper();
+            //Mapper.CreateMap<ApplicationUser, UserViewModel>();
+            //var mapperConf = mapper.CreateMapper(); //.CreateMap<ApplicationUser, UserViewModel>();
+            var vmUser = mapperConf.Map<UserViewModel>(user);
+            return View(vmUser);
+
+        }
+
 
         #region Helpers
 

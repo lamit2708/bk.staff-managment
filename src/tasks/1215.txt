@@ -9,28 +9,36 @@ Login by Admin =>Customers/Index show all
 Allow Admin Change Staff to another staff
 Add Dashboard
 Assign Privs to Dashboard
-//CURRENT TASK
-
-Write Report
-
-//TASKS
 Add Dashboard: All Customers, All Users
-
+Home/Index
++List Number Of Staffs
++List Number Of Customers
 Add Manager To Role
-Allow Role To See All Customers, All Staffs
-Allow Role To change Staff of an Customer!
-
++Allow Role To See All Customers, All Staffs
++Allow Role To change Staff of an Customer!
 When Staff Login
 +Add Customer: Add StaffCode To Customer
-
 +Each Staff list Customer of themself.
 
 When Manager or Admin Login
 +List All Staffs, List All Customer
 
-Home/Index
-+List Number Of Staffs
-+List Number Of Customers
+
+
+
+//CURRENT TASK
+Add Account To Staff and Admin
+
+
+//TASKS
+Write Report
+
+
+
+
+
+
+
 
 
 
