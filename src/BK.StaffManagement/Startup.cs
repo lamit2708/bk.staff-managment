@@ -67,6 +67,7 @@ namespace BK.StaffManagement
                 var conn = p.GetService<IDbConnection>();
                 return conn.BeginTransaction();
             });
+            //services.AddMvc();
             services.AddMvc();
 
         }
